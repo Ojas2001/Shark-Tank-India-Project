@@ -1,0 +1,21 @@
+credentials:
+  usernames:
+    sarthak:
+      email: sarthak@gmail.com
+      name: Sarthak Bhatkar
+      password: sarthak # To be replaced with hashed password
+    saurabh:
+      email: ojas@gmail.com
+      name: Ojas Deodhar
+      password: ojas # To be replaced with hashed password
+    rbriggs:
+      email: priti@gmail.com
+      name: Priti Kulkarni
+      password: priti # To be replaced with hashed password
+cookie:
+  expiry_days: 30
+  key: random_signature_key # Must be string
+  name: random_cookie_name
+preauthorized:
+  emails:
+  - melsby@gmail.com
