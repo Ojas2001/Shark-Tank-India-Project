@@ -3,6 +3,7 @@ import pandas as pd
 import pickle
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
+import numpy as np
 
 
 #st.components.v1.html(custom_html)
@@ -39,7 +40,7 @@ def main():
         ask_equity = st.number_input('Ask equity', key='Ask equity (in %)',min_value=0,max_value=100)
         ask_valuation = st.number_input('Ask valuation', key='Ask valuation (in Lakhs INR)',min_value=0)
 
-        amit_present = st.selectbox('Amit present', ("Yes", "No"), key='Amit present')
+        amit_present = st.selectbox('Amit/Ashneer present', ("Yes", "No"), key='Amit present')
         aman_present = st.selectbox('Aman present', ("Yes", "No"), key='Aman present')
         namita_present = st.selectbox('Namita present', ("Yes", "No"), key='Namita present')
         vineeta_present = st.selectbox('Vineeta present', ("Yes", "No"), key='Vineeta present')
@@ -72,14 +73,15 @@ def main():
                 deal_inputs = [Category_mapping[Category], float(Male_rating), float(Female_rating), float(pitcher_ask_amount), float(ask_equity), float(ask_valuation), present_mapping[amit_present], present_mapping[aman_present], present_mapping[namita_present], present_mapping[vineeta_present], present_mapping[peyush_present], present_mapping[ghazal_present]]
 
                 data = pd.read_excel('training.xlsx')
-
-                phase_1_training = data.drop(['deal','deal_amount','deal_equity','deal_valuation','amit_deal','anupam_deal',
-                              'aman_deal','namita_deal','vineeta_deal','peyush_deal','ghazal_deal',
-                              'total_sharks_invested','equity_per_shark','amount_per_shark',
-                              'anupam_present'], axis=1)
-                
-                phase_1_scaler = StandardScaler().fit(phase_1_training)
-                phase_1_scaler.transform(phase_1_training) 
+                X = data.drop(['deal','deal_amount','deal_equity','deal_valuation','amit_deal','anupam_deal','aman_deal','namita_deal','vineeta_deal','peyush_deal','ghazal_deal','total_sharks_invested','equity_per_shark','amount_per_shark','anupam_present'], axis=1)
+                y = data['deal']
+                y = np.array(y)
+                y = y.astype(int)
+                x_train, x_test, y_train, y_test = train_test_split(X, y, test_size = 0.25,shuffle=False)
+                #phase_1_training = data.drop(['deal','deal_amount','deal_equity','deal_valuation','amit_deal','anupam_deal','aman_deal','namita_deal','vineeta_deal','peyush_deal','ghazal_deal','total_sharks_invested','equity_per_shark','amount_per_shark','anupam_present'], axis=1)
+            
+                phase_1_scaler = StandardScaler().fit(x_train)
+                phase_1_scaler.transform(x_train) 
                 deal_inputs = pd.DataFrame([deal_inputs], columns=title)
                 deal = phase_1_scaler.transform(deal_inputs) # input for deal prediction
 
